@@ -8,6 +8,9 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 
 public class auth extends JFrame implements ActionListener {
     JTextField login;
@@ -54,6 +57,7 @@ public class auth extends JFrame implements ActionListener {
 
     }
 
+    //permet de hasher un String
     public static String getSHA(String input) {
 
         try {
@@ -87,6 +91,7 @@ public class auth extends JFrame implements ActionListener {
 
     }
 
+    //méthode déclenchée lors de l'appui sur le bouton de connection
     public void actionPerformed(ActionEvent e) {
         System.out.println("Nom d'utilisateur : "+login.getText());
         String hash = getSHA(password.getText()+login.getText());
@@ -94,9 +99,18 @@ public class auth extends JFrame implements ActionListener {
         InterrogBD();
 
         System.out.println(authCorrecte(login.getText(), hash));
-
+        LinkedList<String> participants = new LinkedList<>();
+        participants.add("Julien");
+        participants.add("Camélia");
+        Date date = new Date();
+        Message mess = new Message("Julien", "Camélia","coucou",date);
+        ArrayList<Message> listeMessages;
+        Conversation conv = new Conversation(participants,this);
+        conv.InterrogBD();
+        conv.sendMessage(mess);
     }
 
+    //permet de se connecter à la base de données
     public void InterrogBD() {
         try {
             //Enregistrement de la classe du driver par le driverManager
@@ -113,6 +127,7 @@ public class auth extends JFrame implements ActionListener {
         }
     }
 
+    //permet d'ajouter un utilisateur à la base de données
     public void addUser(String username, String mdp) {
         try {
             String usedb = "use H7wytURoJ0";
@@ -128,6 +143,7 @@ public class auth extends JFrame implements ActionListener {
         }
     }
 
+    //permet de vérifier que l'utilisateur a saisi le bon mot de passe
     public boolean authCorrecte(String username, String hash) {
         try {
             String usedb = "use H7wytURoJ0";
